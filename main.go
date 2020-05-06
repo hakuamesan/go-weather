@@ -3,17 +3,25 @@ package main
 import (
 	//	"bytes"
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 )
 
 func main() {
-	debug := false
+	var city string
+	var units string
+	var appid string
+	var debug bool
 
-	city := "London"
-	units := "metric"
-	appid := "103e41e1f9fdd4e18a872b70f4a1c251"
+	flag.StringVar(&city, "l", "London", "Location")
+	flag.StringVar(&units, "m", "metric", "Units in Metric, US, UK, etc")
+	flag.StringVar(&appid, "api", "103e41e1f9fdd4e18a872b70f4a1c251", "API key")
+	flag.BoolVar(&debug, "d", false, "Debug")
+
+	flag.Parse()
+
 	url := "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=" + units + "&appid=" + appid
 	if debug {
 		fmt.Println(url)
