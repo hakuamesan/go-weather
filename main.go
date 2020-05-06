@@ -7,22 +7,28 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"time"
 )
 
 func main() {
-	var city string
-	var units string
-	var appid string
-	var debug bool
+	var (
+		city  string
+		units string
+		appid string
+		debug bool
+		lang  string
+	)
 
-	flag.StringVar(&city, "l", "London", "Location")
+	flag.StringVar(&lang, "l", "en", "Language")
+	flag.StringVar(&city, "p", "London", "Place")
 	flag.StringVar(&units, "m", "metric", "Units in Metric, US, UK, etc")
 	flag.StringVar(&appid, "api", "103e41e1f9fdd4e18a872b70f4a1c251", "API key")
-	flag.BoolVar(&debug, "d", false, "Debug")
+	flag.BoolVar(&debug, "d", false, "Debug (default: False)")
 
 	flag.Parse()
 
-	url := "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=" + units + "&appid=" + appid
+	url := "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=" + units + "&appid=" + appid + "&lang=" + lang
+
 	if debug {
 		fmt.Println(url)
 	}
@@ -54,8 +60,8 @@ func main() {
 
 	type WeatherResponse struct {
 		Coord struct {
-			lon float64
-			lat float64
+			Lon float64
+			Lat float64
 		}
 		Main struct {
 			Temp       float64
@@ -67,9 +73,9 @@ func main() {
 		}
 		Visibility float64
 		Weather    []struct {
-			Main string
-			Desc string
-			Icon string
+			Main        string
+			Description string
+			Icon        string
 		}
 
 		Wind struct {
@@ -84,8 +90,9 @@ func main() {
 		}
 		Timezone float64
 		Clouds   struct {
-			all float64
+			All float64
 		}
+		Name string
 	}
 
 	var f WeatherResponse
@@ -94,12 +101,18 @@ func main() {
 		fmt.Printf("Error unmarshall %s", err)
 	}
 
+	fmt.Printf("Current weather at %s, %s is:\n", f.Name, f.Sys.Country)
+	fmt.Printf("Latitude: %.2f, Longitude: %.2f \n", f.Coord.Lat, f.Coord.Lon)
 	fmt.Printf("Current temperature is %.2f%s \n", f.Main.Temp, degree)
 	fmt.Printf("Feels like %.2f%s \n", f.Main.Feels_like, degree)
+	fmt.Printf("Description: %s \n", f.Weather[0].Description)
 	fmt.Printf("Wind Speed %.2f%s \n", f.Wind.Speed, speed)
-	fmt.Printf("Clouds %.2f \n", f.Clouds.all)
+	fmt.Printf("Clouds %.2f \n", f.Clouds.All)
 	fmt.Printf("Visibility %.2f \n", f.Visibility)
-	fmt.Printf("Sunrise is at %.2f \n", f.Sys.Sunrise)
-	fmt.Printf("Sunset is at %.2f \n", f.Sys.Sunset)
+	sr := time.Unix(int64(f.Sys.Sunrise), 0)
+	ss := time.Unix(int64(f.Sys.Sunset), 0)
+	fmt.Printf("Current time is %s\n", time.Now().Format("3:05PM"))
+	fmt.Printf("Sunrise is at %d:%d:%d \n", sr.Hour(), sr.Minute(), sr.Second())
+	fmt.Printf("Sunset is at %d:%d:%d \n", ss.Hour(), ss.Minute(), ss.Second())
 
 }
