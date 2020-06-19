@@ -1,4 +1,4 @@
-# go-weather
+# Go weather
 Go command-line tool to get the weather from OpenWeatherAPI
 
 
@@ -11,4 +11,3 @@ Go command-line tool to get the weather from OpenWeatherAPI
 -d debug with json output
 ```
 
-# 
