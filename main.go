@@ -1,7 +1,6 @@
 package main
 
 import (
-	//	"bytes"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -9,6 +8,44 @@ import (
 	"net/http"
 	"time"
 )
+
+
+type WeatherResponse struct {
+		Coord struct {
+			Lon float64
+			Lat float64
+		}
+		Main struct {
+			Temp       float64
+			Feels_like float64
+			Temp_Min   float64
+			Temp_Max   float64
+			Humidity   float64
+			Pressure   float64
+		}
+		Visibility float64
+		Weather    []struct {
+			Main        string
+			Description string
+			Icon        string
+		}
+
+		Wind struct {
+			Speed float64
+			Deg   float64
+		}
+		Dt  float64
+		Sys struct {
+			Country string
+			Sunrise float64
+			Sunset  float64
+		}
+		Timezone float64
+		Clouds   struct {
+			All float64
+		}
+		Name string
+	}
 
 func main() {
 	var (
@@ -58,42 +95,7 @@ func main() {
 		fmt.Println(string(data))
 	}
 
-	type WeatherResponse struct {
-		Coord struct {
-			Lon float64
-			Lat float64
-		}
-		Main struct {
-			Temp       float64
-			Feels_like float64
-			Temp_Min   float64
-			Temp_Max   float64
-			Humidity   float64
-			Pressure   float64
-		}
-		Visibility float64
-		Weather    []struct {
-			Main        string
-			Description string
-			Icon        string
-		}
-
-		Wind struct {
-			Speed float64
-			Deg   float64
-		}
-		Dt  float64
-		Sys struct {
-			Country string
-			Sunrise float64
-			Sunset  float64
-		}
-		Timezone float64
-		Clouds   struct {
-			All float64
-		}
-		Name string
-	}
+	
 
 	var f WeatherResponse
 	err = json.Unmarshal(data, &f)
