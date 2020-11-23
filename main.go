@@ -56,7 +56,7 @@ func main() {
 	)
 
 	appid := "shhh..its a secret"
-	
+
 	flag.StringVar(&lang, "l", "en", "Language")
 	flag.StringVar(&city, "p", "London", "Place")
 	flag.StringVar(&units, "m", "metric", "Units in Metric, US, UK, etc")
