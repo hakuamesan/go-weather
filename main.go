@@ -55,10 +55,11 @@ func main() {
 		lang  string
 	)
 
+	appid := "shhh..its a secret"
+	
 	flag.StringVar(&lang, "l", "en", "Language")
 	flag.StringVar(&city, "p", "London", "Place")
 	flag.StringVar(&units, "m", "metric", "Units in Metric, US, UK, etc")
-	flag.StringVar(&appid, "api", "103e41e1f9fdd4e18a872b70f4a1c251", "API key")
 	flag.BoolVar(&debug, "d", false, "Debug (default: False)")
 
 	flag.Parse()
